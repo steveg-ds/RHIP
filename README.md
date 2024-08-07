@@ -1,6 +1,6 @@
 # RHIP
 
-This R project contains all the code used in the thesis "Rurality and Robustness: Rural Areas and Housing Insecurity Risk" 
+This R project contains all the code used in my thesis "Rurality and Robustness: Rural Areas and Housing Insecurity Risk" 
 
 In the final crunch to finish my thesis all semblance of order went out the door. I am working to get it all organized and cleaned up as soon as possible but the code does get the job done. I am also going to set up the option to run the code in a docker container to avoid some potential installation hassles. 
 
