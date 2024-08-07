@@ -9,3 +9,5 @@ How it works:
 ACS Data Collection.R
 
 Accesses the Census API and collects processes American Community Survey (ACS) data. It verifies and sets the Census API key, and reads FIPS codes from a CSV file. It then collects the needed ACS variables for the year 2019. Finally, the data is saved as a CSV file for further analysis.
+
+(To be completed)
