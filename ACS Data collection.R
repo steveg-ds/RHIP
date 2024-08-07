@@ -2,7 +2,7 @@
 libs <- c("tidycensus", "dplyr", "stargazer")
 
 # install.packages(libs) # uncomment to install packages
-lapply(libs, require, character.only=T)
+lapply(libs, require, character.only = T)
 rm("libs")
 
 
@@ -16,7 +16,7 @@ census_api_key(cen_key, install = TRUE)
 fips <- read.csv(file.path("data", "fips_codes.csv"), header = TRUE, fileEncoding = "UTF-8-BOM")
 
 # Set the year for the ACS data
-year <- 2021
+year <- 2019
 
 # Load ACS variables for the specified year
 acs_variables <- as.data.frame(load_variables(year, "acs5", cache = TRUE))

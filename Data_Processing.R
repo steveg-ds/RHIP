@@ -1,7 +1,11 @@
-libs <- c("data.table", "dplyr", "matrixStats", "cowplot", "corrplot", "cluster",  "factoextra",
-          "rpart", "rpart.plot", "nnet", "kknn", "MASS", "class", "e1071", "gridExtra",
-          "plyr", "tibble", "NeuralNetTools", "caret", "broom", "sf",
-          "mapview", "spdep", "leaflet.extras2", "tigris", "Hmisc","corrplot","PerformanceAnalytics", "ape")
+libs <- c("MatrixModels", "nloptr", "quantreg", "lme4", "car", "rstatix", 
+          "FactoMineR", "ggpubr", "factoextra", "data.table", "dplyr", 
+          "matrixStats", "cowplot", "corrplot", "cluster", "rpart", 
+          "rpart.plot", "nnet", "kknn", "MASS", "class", "e1071", 
+          "gridExtra", "plyr", "tibble", "NeuralNetTools", "caret", 
+          "broom", "sf", "mapview", "spdep", "leaflet.extras2", "tigris", 
+          "Hmisc", "PerformanceAnalytics", "ape", 'doParallel', 'foreach')
+
 install.packages(libs)
 lapply(libs, require, character.only=T)
 source("Housing_Insecurity_Functions.R")
@@ -10,6 +14,8 @@ rm("libs")
 options(tigris_use_chache = T)
 options(tigris_year = 2019)
 
+install.packages("factoextra")
+
 #_____________________________________________________________________________________________________________________
 # read in data
 #_____________________________________________________________________________________________________________________
@@ -17,10 +23,10 @@ set.seed(123)
 
 
 
-ruca <- fread(file.path("key_r_files/data", "ruca2010revised.csv"), header = TRUE)[, 3:4] %>%
+ruca <- fread(file.path("data", "ruca2010revised.csv"), header = TRUE)[, 3:4] %>%
   mutate(FIPS = as.character(FIPS))
 
-ct_data <- fread(file.path("key_r_files/data", "ct_data.csv"), header = TRUE)  %>%
+ct_data <- fread(file.path("data", "ct_data.csv"), header = TRUE)  %>%
   mutate(GEOID = as.character(GEOID))
 
 ct_data <- ct_data[ruca, on = c("GEOID" = "FIPS")]
@@ -37,8 +43,6 @@ if (!file.exists(file.path("final_data", "rural_neighbors_ct_data.csv"))) {
     clean_map <- create_maps(fips)
   }
   print("Running neighbors algorithm")
-  library(doParallel)
-  library(foreach)
   states_list <- sample(state_neighbors$State,2)
   cl <- makeCluster(6)
   registerDoParallel(cl)
@@ -101,4 +105,4 @@ for (state in states){
   print((paste("State: ", state[[1]], "iteration time: ", round(Sys.time() - time.start, 2), "total time: ", round(Sys.time() - time.total, 2))))
 }
 
-# write.csv(fin_cluster_df, file.path("key_r_files/final_data", "processed_ct_data.csv"))
+write.csv(fin_cluster_df, file.path("key_r_files/final_data", "processed_ct_data.csv"))
