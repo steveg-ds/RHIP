@@ -10,14 +10,14 @@ def collect_acs_data(
     geography: Literal["state", "county", "tract"],
     year: int,
     states: Union[pd.Series, List[str]],
-    states_to_remove: List[str],
     vars: Dict[str, str],
-    max_workers: int = 5,
+    max_workers: int = 10,
     geometry: bool = False,
     moe: bool = False,
 ):
     def get_state_data(
         geography: str,
+        year: int,
         state: str,
         variables: Dict[str, str],
         geo: bool,
@@ -27,7 +27,7 @@ def collect_acs_data(
                 geography=geography,
                 variables=variables,
                 state=state,
-                year=2023,
+                year=year,
                 geometry=geo,
             )
         except Exception as e:
@@ -39,10 +39,6 @@ def collect_acs_data(
 
     tc.set_census_api_key(API_KEY)
 
-    if isinstance(states, pd.Series):
-        states = states.values.tolist()
-
-    states = [state for state in list(set(states)) if state not in states_to_remove]
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = []
@@ -51,6 +47,7 @@ def collect_acs_data(
                 get_state_data,
                 geography=geography,
                 state=state,
+                year=year,
                 variables=vars,
                 geo=geometry,
             )
