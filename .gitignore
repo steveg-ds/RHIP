@@ -5,6 +5,14 @@ dev*
 *.xls
 *.csv
 *.toml
+*.pdf
+*.js
+*.css
+*.woff
+*.html
+*.parquet
+*.md
+
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Byte-compiled / optimized / DLL files

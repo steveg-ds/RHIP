@@ -95,7 +95,7 @@ This is what the RUCC data looks like:
 
 ### RUCC Code Distributions
 
-![png](data_exploration_files/data_exploration_4_0.png)
+![png](data_exploration_4_0.png)
 
 - The distinctions for the RUCC codes are different (metropolitan & nonmetropolitan vs metropolitan, micropolitan, small town, & rural). I don't think I have anything definitive to say about that at the moment but if we stick with the RUCC codes, something might need to be done to differentiate nonmetropolitan and rural.
 	- One possible option would be to calculate the most frequent RUCA code for the census tracts in each county which would make it reasonable to say if a county is 'mostly rural' or 'mostly micropolitan'
@@ -397,7 +397,7 @@ Initial Observations on the descriptive statistics:
 	- Presumably this is due to various measures put in place because of COVID-19, assuming measures were taken regarding immigrant detention as with like traditional state prisons.
 - Every 2/3 days there were between 26,501 and 44,317 people incarcerated in the system.
 
-![png](data_exploration_files/data_exploration_19_0.png)
+![png](data_exploration_19_0.png)
 
 I don't remember how to do it but I'll try to find how the correct way to overlay the average daily population line over the daily population line, but I think these visualizations do a good job at reflecting the high level of variation day-to-day compared to the overall long-term increases.
 
@@ -507,7 +507,7 @@ Averages per RUCC code
 
 - I would have to dig more into the county level groupings but it is interesting that the middle of the road RUCC level appears to have very low variation, not quite sure what to make of it at the moment.
 
-![png](data_exploration_files/data_exploration_23_0.png)
+![png](data_exploration_23_0.png)
 
 ## Next Steps
 
