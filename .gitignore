@@ -12,6 +12,7 @@ dev*
 *.html
 *.parquet
 *.md
+*.xlsx
 
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
 
