@@ -13,7 +13,7 @@ dev*
 *.parquet
 *.md
 *.xlsx
-
+.geminiignore
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Byte-compiled / optimized / DLL files
