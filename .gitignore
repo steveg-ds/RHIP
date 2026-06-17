@@ -14,6 +14,7 @@ dev*
 *.md
 *.xlsx
 .geminiignore
+renv/
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Byte-compiled / optimized / DLL files
@@ -409,4 +410,4 @@ TSWLatexianTemp*
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
 # Worktrees
-rural-detention/
+
