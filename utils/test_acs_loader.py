@@ -1,6 +1,6 @@
 import pytest
 from pydantic import ValidationError
-from utils.data_loader import CensusDataLoader
+from utils.acs_loader import CensusDataLoader
 import pandas as pd
 
 def test_config_validation():
@@ -29,11 +29,13 @@ def test_loader_fetch(monkeypatch):
     assert df.at[0, "B17001_001E"] == 100
 
 def test_package_exports():
-    from utils import CensusDataLoader
+    from utils import CensusDataLoader, RucaDataLoader
     assert CensusDataLoader is not None
+    assert RucaDataLoader is not None
 
 
 def test_collect_ruca_data(monkeypatch):
+    from utils.ruca_loader import RucaDataLoader
     def mock_read_csv(filepath_or_buffer, *args, **kwargs):
         return pd.DataFrame({
             'TractFIPS20': ['01001020100'],
@@ -47,8 +49,8 @@ def test_collect_ruca_data(monkeypatch):
 
     monkeypatch.setattr(pd, "read_csv", mock_read_csv)
 
-    loader = CensusDataLoader(year=2024)
-    ruca = loader.collect_ruca_data()
+    loader = RucaDataLoader()
+    ruca = loader.load()
 
     assert len(ruca) == 1
     assert ruca.at[0, "TractFIPS"] == "01001020100"
