@@ -26,6 +26,39 @@ class CensusDataLoader(BaseModel):
             year=self.year
         )
 
+    def collect_ruca_data(self) -> pd.DataFrame:
+        """Downloads and cleans the 2020 Rural-Urban Commuting Area (RUCA) codes."""
+        RUCA_URL: str = "https://www.ers.usda.gov/media/5443/2020-rural-urban-commuting-area-codes-census-tracts.csv?v=48133"
+        cols_to_load = [
+            'TractFIPS20', 'TractName20', 'CountyFIPS20', 'CountyName20', 
+            'StateFIPS20', 'StateName20', 'PrimaryRUCA'
+        ]
+        dtypes = {
+            'TractFIPS20': str,
+            'CountyFIPS20': str,
+            'StateFIPS20': str,
+            'StateName20': 'category',
+            'CountyName20': 'category',
+            'PrimaryRUCA': 'int8'
+        }
+        ruca: pd.DataFrame = pd.read_csv(
+            RUCA_URL, 
+            encoding='latin1', 
+            usecols=cols_to_load, 
+            dtype=dtypes
+        )
+        ruca.columns = ruca.columns.str.replace('20$', '', regex=True)
+        ruca.rename(columns={"PrimaryRUCA": "RUCA"}, inplace=True)
+        
+        non_continental = {
+            'Alaska', 'Hawaii', 'American Samoa', 'Guam', 
+            'Commonwealth of the Northern Mariana Islands', 'Puerto Rico', 
+            'United States Virgin Islands'
+        }
+        ruca = ruca[~ruca['StateName'].isin(non_continental)].reset_index(drop=True)
+        return ruca
+
+
 CensusConfig = CensusDataLoader
 BaseCensusDataLoader = CensusDataLoader
 
