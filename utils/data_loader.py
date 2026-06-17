@@ -16,7 +16,7 @@ class BaseCensusDataLoader:
             tc.set_census_api_key(self.config.api_key)
 
     def fetch(self, variables: List[str]) -> pd.DataFrame:
-        var_tuple = tuple(variables)
+        var_tuple = tuple(sorted(variables))
         if var_tuple not in self._cache:
             self._cache[var_tuple] = tc.get_acs(
                 geography="tract",
@@ -24,4 +24,4 @@ class BaseCensusDataLoader:
                 state=self.config.states,
                 year=self.config.year
             )
-        return self._cache[var_tuple]
+        return self._cache[var_tuple].copy()
