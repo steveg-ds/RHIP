@@ -411,3 +411,5 @@ TSWLatexianTemp*
 #*Notes.bib
 # Worktrees
 
+# Quarto
+.quarto/
