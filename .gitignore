@@ -415,3 +415,6 @@ worktrees/
 
 # Quarto
 .quarto/
+cookies.txt
+.gitignore
+xsrf.txt

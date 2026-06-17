@@ -26,7 +26,7 @@ class CensusDataLoader(BaseModel):
             year=self.year
         )
 
-    def collect_ruca_data(self) -> pd.DataFrame:
+    def collect_ruca_data(self, continental=True) -> pd.DataFrame:
         """Downloads and cleans the 2020 Rural-Urban Commuting Area (RUCA) codes."""
         RUCA_URL: str = "https://www.ers.usda.gov/media/5443/2020-rural-urban-commuting-area-codes-census-tracts.csv?v=48133"
         cols_to_load = [
@@ -55,7 +55,8 @@ class CensusDataLoader(BaseModel):
             'Commonwealth of the Northern Mariana Islands', 'Puerto Rico', 
             'United States Virgin Islands'
         }
-        ruca = ruca[~ruca['StateName'].isin(non_continental)].reset_index(drop=True)
+        if continental is True:
+            return ruca[~ruca['StateName'].isin(non_continental)].reset_index(drop=True)
         return ruca
 
 
