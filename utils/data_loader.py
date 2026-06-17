@@ -59,6 +59,4 @@ class CensusDataLoader(BaseModel):
         return ruca
 
 
-CensusConfig = CensusDataLoader
-BaseCensusDataLoader = CensusDataLoader
 
