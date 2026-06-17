@@ -5,8 +5,8 @@ import pytidycensus as tc
 
 class CensusDataLoader(BaseModel):
     year: int = Field(default=2024, ge=2010, le=2026)
-    states: Optional[List[str]] = None
-    api_key: Optional[str] = None
+    states: Optional[List[str]] = None # TODO: This should be the list of states like in collect_ruca_data or from the ACS. 
+    api_key: Optional[str] = None # TODO: class instances should automatically load  
 
     def model_post_init(self, __context) -> None:
         if self.api_key:
