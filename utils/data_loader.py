@@ -3,25 +3,32 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 import pytidycensus as tc
 
-class CensusConfig(BaseModel):
+class CensusDataLoader(BaseModel):
     year: int = Field(default=2024, ge=2010, le=2026)
     states: Optional[List[str]] = None
     api_key: Optional[str] = None
 
-class BaseCensusDataLoader:
-    def __init__(self, config: CensusConfig):
-        self.config = config
-        self._cache = {}  # dict mapping variables tuple to DataFrame
-        if self.config.api_key:
-            tc.set_census_api_key(self.config.api_key)
+    def model_post_init(self, __context) -> None:
+        if self.api_key:
+            try:
+                tc.set_census_api_key(self.api_key)
+            except ValueError:
+                pass
 
     def fetch(self, variables: List[str]) -> pd.DataFrame:
-        var_tuple = tuple(sorted(list(set(variables))))
-        if var_tuple not in self._cache:
-            self._cache[var_tuple] = tc.get_acs(
-                geography="tract",
-                variables=variables,
-                state=self.config.states,
-                year=self.config.year
-            )
-        return self._cache[var_tuple].copy()
+        """Fetches census variables using config states and year."""
+        # Deduplicate variables to avoid duplicate API requests
+        deduped_vars = sorted(list(set(variables)))
+        return tc.get_acs(
+            geography="tract",
+            variables=deduped_vars,
+            state=self.states,
+            year=self.year
+        )
+
+CensusConfig = CensusDataLoader
+BaseCensusDataLoader = CensusDataLoader
+
+import sys
+sys.modules[__package__].CensusDataLoader = CensusDataLoader
+
