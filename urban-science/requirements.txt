@@ -1,0 +1,18 @@
+# UrbanScience project dependencies
+# Install with: .venv/bin/pip install -r requirements.txt
+
+# Core data
+pandas
+numpy
+
+# Census data
+pytidycensus
+python-dotenv
+
+# Visualization
+matplotlib
+
+# Statistics & ML
+statsmodels
+scikit-learn
+tabulate
