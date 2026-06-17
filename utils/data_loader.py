@@ -29,6 +29,3 @@ class CensusDataLoader(BaseModel):
 CensusConfig = CensusDataLoader
 BaseCensusDataLoader = CensusDataLoader
 
-import sys
-sys.modules[__package__].CensusDataLoader = CensusDataLoader
-
