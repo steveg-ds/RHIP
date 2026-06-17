@@ -95,6 +95,7 @@ def test_loader_returns_copy(monkeypatch):
 
 
 def test_package_exports():
-    from utils import CensusConfig, BaseCensusDataLoader
+    from utils import CensusConfig, BaseCensusDataLoader, collect_ruca_data
     assert CensusConfig is not None
     assert BaseCensusDataLoader is not None
+    assert collect_ruca_data is not None
