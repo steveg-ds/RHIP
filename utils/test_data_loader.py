@@ -93,3 +93,8 @@ def test_loader_returns_copy(monkeypatch):
     df1.at[0, "val"] = 999
     assert df2.at[0, "val"] == 100
 
+
+def test_package_exports():
+    from utils import CensusConfig, BaseCensusDataLoader
+    assert CensusConfig is not None
+    assert BaseCensusDataLoader is not None
