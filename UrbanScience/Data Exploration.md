@@ -18,7 +18,7 @@ tags: []
 | 9    | Small town low commuting: primary flow is 10 percent to 30 percent to a small town UA                          |
 | 10   | Rural area: primary flow is to a tract outside an UA                                                           |
 | 99   | Not coded: census tract is entirely in coastal or inland water bodies, with zero population and zero land area |
-|      |                                                                                                                |
+
 
 See the [RUCA Codes](https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/documentation) documentation for detailed info on data and methods used for creating RUCA Codes.
 
