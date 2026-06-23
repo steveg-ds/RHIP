@@ -1,0 +1,8 @@
+pandas
+numpy
+pytidycensus
+python-dotenv
+matplotlib
+statsmodels
+scikit-learn
+tabulate

@@ -13,7 +13,8 @@ dev*
 *.parquet
 *.md
 *.xlsx
-
+.geminiignore
+renv/
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
 
 # Byte-compiled / optimized / DLL files
@@ -408,3 +409,14 @@ TSWLatexianTemp*
 # option is specified. Footnotes are the stored in a file with suffix Notes.bib.
 # Uncomment the next line to have this generated file ignored.
 #*Notes.bib
+# Worktrees
+.worktrees/
+worktrees/
+
+# Quarto
+.quarto/
+cookies.txt
+.gitignore
+xsrf.txt
+RuralDetention/RSS_2025 Walton Lobao.pptx
+RuralDetention/Draft Abstract.md
