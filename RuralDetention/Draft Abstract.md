@@ -7,7 +7,7 @@ tags: []
 
 This paper investigates rural-urban differences in rates of Immigration and Customs Enforcement (ICE) detention. In this analysis, we address three core questions: 
 
-1. To what degree do metro and nonmetro counties vary in ICE detention rates?
+1. To what degree do ~~metro and nonmetro counties~~ census tracts across the rural-urban continuum vary in ICE detention rates?
 2. What sets of community characteristics are important correlates for understanding these differences in ICE detention rates? 
 3. To what extent do ICE detention rates correspond with rates of jail contracting?
 

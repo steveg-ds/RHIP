@@ -5,19 +5,20 @@ tags: []
 
 # RUCA Codes
 
-| Code | Classification description |
-|----|----|
-| 1 | Metropolitan core: primary flow is within an urban area of 50,000 or more people (metro UA) |
-| 2 | Metropolitan high commuting: primary flow is 30 percent or more to a metro UA |
-| 3 | Metropolitan low commuting: primary flow is 10 percent to 30 percent to a metro UA |
-| 4 | Micropolitan core: primary flow is within an urban area of 10,000 to 49,999 people (micro UA) |
-| 5 | Micropolitan high commuting: primary flow is 30 percent or more to a micro UA |
-| 6 | Micropolitan low commuting: primary flow is 10 percent to 30 percent to a micro UA |
-| 7 | Small town core: primary flow is within an urban area of 9,999 or fewer people (small town UA) |
-| 8 | Small town high commuting: primary flow is 30 percent or more to a small town UA |
-| 9 | Small town low commuting: primary flow is 10 percent to 30 percent to a small town UA |
-| 10 | Rural area: primary flow is to a tract outside an UA |
-| 99 | Not coded: census tract is entirely in coastal or inland water bodies, with zero population and zero land area |
+| Code | Classification description                                                                                     |
+| ---- | -------------------------------------------------------------------------------------------------------------- |
+| 1    | Metropolitan core: primary flow is within an urban area of 50,000 or more people (metro UA)                    |
+| 2    | Metropolitan high commuting: primary flow is 30 percent or more to a metro UA                                  |
+| 3    | Metropolitan low commuting: primary flow is 10 percent to 30 percent to a metro UA                             |
+| 4    | Micropolitan core: primary flow is within an urban area of 10,000 to 49,999 people (micro UA)                  |
+| 5    | Micropolitan high commuting: primary flow is 30 percent or more to a micro UA                                  |
+| 6    | Micropolitan low commuting: primary flow is 10 percent to 30 percent to a micro UA                             |
+| 7    | Small town core: primary flow is within an urban area of 9,999 or fewer people (small town UA)                 |
+| 8    | Small town high commuting: primary flow is 30 percent or more to a small town UA                               |
+| 9    | Small town low commuting: primary flow is 10 percent to 30 percent to a small town UA                          |
+| 10   | Rural area: primary flow is to a tract outside an UA                                                           |
+| 99   | Not coded: census tract is entirely in coastal or inland water bodies, with zero population and zero land area |
+|      |                                                                                                                |
 
 See the [RUCA Codes](https://www.ers.usda.gov/data-products/rural-urban-commuting-area-codes/documentation) documentation for detailed info on data and methods used for creating RUCA Codes.
 
