@@ -12,14 +12,19 @@ class CensusDataLoader(BaseModel):
     integrating with RUCA codes for rural/urban classification.
     """
     year: int = Field(default=2024, ge=2010, le=2024)
-    '''Year to collect Census data for''' # TODO: add docstrings like these to all variables
-    # STYLE: I like one space between doc strings and the next variable declaration
+    """Year to collect Census data for"""
+
     states: Optional[List[str]] = None
+    """List of state FIPS codes or abbreviations to restrict Census data queries to"""
 
     api_key: Optional[str] = None
+    """US Census Bureau API key"""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
+
     RUCA: Optional[pd.DataFrame] = None
+    """RUCA classification data table"""
+
     continental: bool = True
     """set to False to get all states and territories"""
 
@@ -30,6 +35,9 @@ class CensusDataLoader(BaseModel):
     }
 
     def model_post_init(self, __context: Any) -> None:
+        """
+        Initializes the model, sets the Census API key, and loads RUCA data.
+        """
         if self.api_key:
             try:
                 tc.set_census_api_key(self.api_key)
@@ -40,6 +48,9 @@ class CensusDataLoader(BaseModel):
 
     @model_validator(mode='after')
     def set_default_states(self) -> 'CensusDataLoader':
+        """
+        Sets default states from the RUCA dataset if no states are specified.
+        """
         if self.states is None and self.RUCA is not None and not self.RUCA.empty:
             self.states = self.RUCA["state_name"].unique().tolist()
         return self
@@ -86,6 +97,7 @@ class CensusDataLoader(BaseModel):
             year=self.year
         )
 
+
 if __name__ == "__main__":
     from dotenv import load_dotenv
     from os import getenv
@@ -93,8 +105,9 @@ if __name__ == "__main__":
     load_dotenv()
 
     poverty_vars = [
-    "B17001_001E",  # Total
-    "B17001_002E",  # Income in the past 12 months below poverty level
+        "B17001_001E",  # Total
+        "B17001_002E",  # Income in the past 12 months below poverty level
     ]
+
     x = CensusDataLoader(api_key=getenv("CENSUS_API_KEY"))
     print(x.fetch(poverty_vars).head())
