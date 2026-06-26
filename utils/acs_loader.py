@@ -97,6 +97,26 @@ class CensusDataLoader(BaseModel):
             year=self.year
         )
 
+    def fetch_multiple(self, queries: List[List[str]]) -> pd.DataFrame:
+        """
+        Fetches multiple sets of census variables.
+
+        Args:
+            queries: A list of lists, where each inner list contains variable IDs to fetch.
+
+        Returns:
+            A pandas DataFrame containing the concatenated results of all queries.
+        """
+        all_results = []
+        for variables in queries:
+            result = self.fetch(variables)
+            all_results.append(result)
+        
+        if not all_results:
+            return pd.DataFrame() # Return empty DataFrame if no queries
+
+        return pd.concat(all_results, axis=0)
+
 
 if __name__ == "__main__":
     from dotenv import load_dotenv
