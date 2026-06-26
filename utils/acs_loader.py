@@ -1,11 +1,13 @@
 import pandas as pd
 from pydantic import BaseModel, Field, ConfigDict, model_validator
-from typing import List, Optional, ClassVar, Any
+from typing import List, Optional, ClassVar, Any, Dict, Union
 import pytidycensus as tc
 import requests
 import io
 import concurrent.futures
 import math
+import os
+import contextlib
 
 
 class CensusDataLoader(BaseModel):
@@ -85,55 +87,78 @@ class CensusDataLoader(BaseModel):
 
         return ruca_df
 
-    def fetch(self, variables: List[str],
-              states: Optional[List[str]] = None) -> pd.DataFrame:
+    def fetch(self, variables: Union[List[str], Dict[str, str]],
+              states: Optional[List[str]] = None,
+              std_out: bool = False) -> pd.DataFrame:
         """Fetches census variables using config states and year."""
-        deduped_vars = sorted(list(set(variables)))
+        if isinstance(variables, dict):
+            fetch_vars = variables
+        else:
+            fetch_vars = sorted(list(set(variables)))
 
         fetch_states = states if states is not None else self.states
 
-        return tc.get_acs(
-            geography="tract",
-            variables=deduped_vars,
-            state=fetch_states,
-            year=self.year
-        )
+        if not std_out:
+            with open(os.devnull, "w") as f:
+                with contextlib.redirect_stdout(f):
+                    return tc.get_acs(
+                        geography="tract",
+                        variables=fetch_vars,
+                        state=fetch_states,
+                        year=self.year
+                    )
+        else:
+            return tc.get_acs(
+                geography="tract",
+                variables=fetch_vars,
+                state=fetch_states,
+                year=self.year
+            )
 
-    def fetch_multiple(self, variables: List[str],
-                       max_workers: int = 10) -> pd.DataFrame:
+    def fetch_multiple(self, variables: Union[List[str], Dict[str, str]],
+                       max_workers: int = 10,
+                       std_out: bool = False) -> pd.DataFrame:
         """
         Fetches census variables using multithreading to process states in parallel.
 
         Args:
-            variables: A list of variable IDs to fetch.
+            variables: A list or dictionary of variable IDs to fetch.
             max_workers: Max number of threads for parallel processing.
+            std_out: Whether to print stdout messages.
 
         Returns:
             A pandas DataFrame with concatenated results from all queries.
         """
-        deduped_vars = sorted(list(set(variables)))
+        if isinstance(variables, dict):
+            fetch_vars = variables
+        else:
+            fetch_vars = sorted(list(set(variables)))
         
-        # NOTE: self.states will always be set in the model validator so no need ot handle instances where states not provided.
-
-        chunk_size = math.ceil(num_states / max_workers)
-        state_chunks = [
-            self.states[i:i + chunk_size]
-            for i in range(0, num_states, chunk_size)
-        ]
+        # NOTE: self.states will always be set in the model validator so no need to handle instances where states not provided.
+        states_list = self.states if self.states is not None else []
 
         all_results = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_to_states = {
-                executor.submit(self.fetch, deduped_vars, states_chunk)
-                for states_chunk in state_chunks
-            }
-            for future in concurrent.futures.as_completed(future_to_states):
-                try:
-                    result = future.result()
-                    all_results.append(result)
-                except Exception as exc:
-                    print(f'State chunk generated an exception: '  # E501
-                          f'{exc}')
+        
+        def run_fetch():
+            with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+                future_to_state = {
+                    executor.submit(self.fetch, fetch_vars, [state], True)
+                    for state in states_list
+                }
+                for future in concurrent.futures.as_completed(future_to_state):
+                    try:
+                        result = future.result()
+                        all_results.append(result)
+                    except Exception as exc:
+                        if std_out:
+                            print(f'State query generated an exception: {exc}')
+
+        if not std_out:
+            with open(os.devnull, "w") as f:
+                with contextlib.redirect_stdout(f):
+                    run_fetch()
+        else:
+            run_fetch()
         
         if not all_results:
             return pd.DataFrame()  # Return empty DataFrame if no results
