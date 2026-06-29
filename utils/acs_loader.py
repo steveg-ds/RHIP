@@ -89,7 +89,7 @@ class CensusDataLoader(BaseModel):
 
     def fetch(self, variables: Union[List[str], Dict[str, str]],
               states: Optional[List[str]] = None,
-              std_out: bool = False) -> pd.DataFrame:
+              std_out: bool = False, moe=False) -> pd.DataFrame:
         """Fetches census variables using config states and year."""
         if isinstance(variables, dict):
             fetch_vars = variables
@@ -101,23 +101,29 @@ class CensusDataLoader(BaseModel):
         if not std_out:
             with open(os.devnull, "w") as f:
                 with contextlib.redirect_stdout(f):
-                    return tc.get_acs(
+                    df = tc.get_acs(
                         geography="tract",
                         variables=fetch_vars,
                         state=fetch_states,
                         year=self.year
                     )
         else:
-            return tc.get_acs(
+            df = tc.get_acs(
                 geography="tract",
                 variables=fetch_vars,
                 state=fetch_states,
                 year=self.year
             )
 
+        if not moe and not df.empty:
+            moe_cols = [col for col in df.columns if '_moe' in col]
+            df = df.drop(columns=moe_cols)
+
+        return df
+
     def fetch_multiple(self, variables: Union[List[str], Dict[str, str]],
                        max_workers: int = 10,
-                       std_out: bool = False) -> pd.DataFrame:
+                       std_out: bool = False, moe=False) -> pd.DataFrame:
         """
         Fetches census variables using multithreading to process states in parallel.
 
@@ -142,7 +148,7 @@ class CensusDataLoader(BaseModel):
         def run_fetch():
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
                 future_to_state = {
-                    executor.submit(self.fetch, fetch_vars, [state], True)
+                    executor.submit(self.fetch, fetch_vars, [state], True, moe)
                     for state in states_list
                 }
                 for future in concurrent.futures.as_completed(future_to_state):
