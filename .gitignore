@@ -4,7 +4,8 @@ Notes/
 dev*
 *.xls
 *.csv
-*.toml
+*.toml  
+!pyproject.toml
 *.pdf
 *.js
 *.css
@@ -16,12 +17,18 @@ dev*
 .geminiignore
 renv/
 ## GH python.gitigore  https://github.com/github/gitignore/blob/main/Python.gitignore
-
+docs/
+notebooks
+RuralDetention
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
 *$py.class
 
+ice-detention-trends
+RuralDetention
+UrbanScience
+tests
 # C extensions
 *.so
 
@@ -420,3 +427,5 @@ cookies.txt
 xsrf.txt
 RuralDetention/RSS_2025 Walton Lobao.pptx
 RuralDetention/Draft Abstract.md
+utils/test_acs_loader.py
+RuralDetention/RSS_Example.pptx
