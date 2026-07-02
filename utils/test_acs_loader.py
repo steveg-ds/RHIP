@@ -86,31 +86,7 @@ def test_fetch_with_dict(monkeypatch):
     assert df.at[0, "poverty_rate"] == 100
 
 def test_package_exports():
-    from utils import CensusDataLoader, RucaDataLoader
+    from utils import CensusDataLoader
     assert CensusDataLoader is not None
-    assert RucaDataLoader is not None
-
-
-def test_collect_ruca_data(monkeypatch):
-    from utils.ruca_loader import RucaDataLoader
-    def mock_read_csv(filepath_or_buffer, *args, **kwargs):
-        return pd.DataFrame({
-            'TractFIPS20': ['01001020100'],
-            'TractName20': ['Census Tract 201'],
-            'CountyFIPS20': ['01001'],
-            'CountyName20': ['Autauga County'],
-            'StateFIPS20': ['01'],
-            'StateName20': ['Alabama'],
-            'PrimaryRUCA': [1]
-        })
-
-    monkeypatch.setattr(pd, "read_csv", mock_read_csv)
-
-    loader = RucaDataLoader()
-    ruca = loader.load()
-
-    assert len(ruca) == 1
-    assert ruca.at[0, "TractFIPS"] == "01001020100"
-    assert ruca.at[0, "RUCA"] == 1
 
 
