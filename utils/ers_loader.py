@@ -12,7 +12,7 @@ class ERSDataLoader(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    # Assuming continental is a boolean attribute for filtering
+    # boolean attribute for filtering out non-continental geographies
     continental: bool = True
 
     NON_CONTINENTAL: set[str] = {
