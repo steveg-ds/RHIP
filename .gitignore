@@ -9,3 +9,8 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 .pytest_cache/
+ice-detention-trends
+
+.superpowers
+.hermes
+.agents
