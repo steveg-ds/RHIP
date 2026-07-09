@@ -1,7 +1,6 @@
 notebooks/
 RuralDetention/
 UrbanScience/
-docs/superpowers/
 .env
 .venv/
 __pycache__/
