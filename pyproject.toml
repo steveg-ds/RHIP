@@ -8,13 +8,14 @@ version = "0.1.0"
 dependencies = [
     "pandas",
     "pydantic",
-    "pytidycensus",
+    "pytidycensus[map]",
     "requests",
     "python-dotenv",
     "numpy",
     "geopandas",
     "shapely",
-    "pygris"
+    "pygris",
+    "lonboard<0.14.0"
 ]
 
 [tool.setuptools.packages.find]

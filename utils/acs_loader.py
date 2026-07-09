@@ -6,6 +6,13 @@ from typing import Any, ClassVar, Literal
 import geopandas as gpd
 import numpy as np
 import pandas as pd
+try:
+    import lonboard
+    if not hasattr(lonboard.experimental, "ArcLayer") and hasattr(lonboard, "ArcLayer"):
+        lonboard.experimental.ArcLayer = lonboard.ArcLayer
+except ImportError:
+    pass
+
 import pytidycensus as tc
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from pygris import counties, tracts
