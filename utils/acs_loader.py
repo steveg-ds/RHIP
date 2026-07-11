@@ -119,10 +119,10 @@ class CensusDataLoader(BaseModel):
     def fetch_multiple(
         self,
         variables: list[str] | dict[str, str],
-        year: int | None = None,
         max_workers: int = 10,
         std_out: bool = False,
         moe: bool = False,
+        **kwargs: Any,
     ) -> pd.DataFrame:
         if isinstance(variables, dict):
             fetch_vars = variables
@@ -144,9 +144,9 @@ class CensusDataLoader(BaseModel):
                         self.fetch,
                         fetch_vars,
                         states=[state],
-                        year=year or 2022,
                         std_out=True,
                         moe=moe,
+                        **kwargs,
                     )
                     for state in fetch_states
                 }
@@ -176,6 +176,7 @@ class CensusDataLoader(BaseModel):
         max_workers: int = 10,
         std_out: bool = False,
         moe: bool = False,
+        **kwargs: Any,
     ) -> pd.DataFrame:
         self._validate_years(years)
 
@@ -183,10 +184,11 @@ class CensusDataLoader(BaseModel):
         for year in years:
             df = self.fetch_multiple(
                 variables=variables,
-                year=year,
                 max_workers=max_workers,
                 std_out=std_out,
                 moe=moe,
+                year=year,
+                **kwargs,
             )
             df["year"] = year  # Add a year column for identification
             all_dfs.append(df)
@@ -197,7 +199,7 @@ class CensusDataLoader(BaseModel):
         return pd.concat(all_dfs, axis=0)
 
     def collect_geometry_data(
-        self, geometry_type: Literal["tracts", "counties"] = "tracts"
+        self, geometry_type: Literal["tracts", "counties"] = "tracts", year: int = 2022
     ) -> gpd.GeoDataFrame:
         """Collects geometry using multithreading."""
         all_geometries = []
@@ -210,8 +212,9 @@ class CensusDataLoader(BaseModel):
             raise ValueError(f"Unknown geometry_type: {geometry_type}")
 
         def fetch_geometry_for_state(state):
-            with io.StringIO() as buf, contextlib.redirect_stdout(buf):
-                return func(state=state, cb=True, cache=True)
+            # pygris.counties/tracts with cb=True uses US-wide file if state=None
+            # but here it is called per-state.
+            return func(state=state, cb=True, cache=True, year=year)
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             future_to_state = {
