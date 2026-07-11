@@ -103,7 +103,7 @@ class CensusDataLoader(BaseModel):
             df = df.drop(columns=moe_cols)
 
         if "GEOID" in df.columns:
-            df["GEOID"] = df["GEOID"].astype(str).str.zfill(5)
+            df["GEOID"] = df["GEOID"].astype(int)
 
         return df
 

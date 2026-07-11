@@ -40,20 +40,20 @@ class ERSDataLoader(BaseModel):
             "https://www.ers.usda.gov/media/5443/2020-rural-urban-"
             "commuting-area-codes-census-tracts.csv?v=48133"
         )
-        ruca_df = self._load_csv(ruca_url)
+        df = self._load_csv(ruca_url)
 
         # Rename columns for consistency
-        ruca_df = ruca_df.rename(
+        df = df.rename(
             columns={"StateName20": "state_name", "RUCA2010": "ruca_code"}
         )
 
         if self.continental:
             # Filter out non-continental US states
-            ruca_df = ruca_df[
-                ~ruca_df["state_name"].isin(list(self.NON_CONTINENTAL))
+            df = df[
+                ~df["state_name"].isin(list(self.NON_CONTINENTAL))
             ].copy()
 
-        return ruca_df
+        return df
 
     def collect_rucc_data(self) -> pd.DataFrame:
         """Loads and cleans RUCC data."""
@@ -64,16 +64,16 @@ class ERSDataLoader(BaseModel):
         # New data structure has 'Attribute' and 'Value' rows.
         # Need to pivot to get 'RUCC' and 'Population' as columns
         # Pivot table: FIPS, State, County_Name as index
-        rucc_data = data.pivot(
+        df = data.pivot(
             index=["FIPS", "State", "County_Name"], columns="Attribute", values="Value"
         ).reset_index()
 
-        rucc_data.rename(columns={"RUCC_2023": "RUCC", "FIPS": "GEOID"}, inplace=True)
-        rucc_data["GEOID"] = rucc_data["GEOID"].astype(str).str.zfill(5)
+        df.rename(columns={"RUCC_2023": "RUCC", "FIPS": "GEOID"}, inplace=True)
+        df["GEOID"] = df["GEOID"].astype(int)
 
         # Clean county names
-        rucc_data["County_Name"] = (
-            rucc_data["County_Name"]
+        df["County_Name"] = (
+            df["County_Name"]
             .str.replace("County", "", regex=False)
             .str.replace("Parish", "", regex=False)
             .str.strip()
@@ -82,4 +82,5 @@ class ERSDataLoader(BaseModel):
 
         # TODO: this function needs to apply the same continental bool logic as collect_ruca_data
 
-        return rucc_data
+        return df
+

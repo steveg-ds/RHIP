@@ -14,3 +14,7 @@ ice-detention-trends
 .hermes
 .agents
 dev.py
+.jupyter
+.data
+dev.py
+uv.lock
