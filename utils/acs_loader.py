@@ -102,6 +102,9 @@ class CensusDataLoader(BaseModel):
             moe_cols = [col for col in df.columns if "_moe" in col]
             df = df.drop(columns=moe_cols)
 
+        if "GEOID" in df.columns:
+            df["GEOID"] = df["GEOID"].astype(str).str.zfill(5)
+
         return df
 
     def _validate_years(self, years: list[int]) -> None:
@@ -230,9 +233,12 @@ class CensusDataLoader(BaseModel):
 
         if not all_geometries:
             return gpd.GeoDataFrame()
-        return gpd.GeoDataFrame(
+        result = gpd.GeoDataFrame(
             pd.concat(all_geometries, ignore_index=True, sort=False)
         )
+        if not result.empty and result.crs is not None:
+            result = result.to_crs("EPSG:4326")
+        return result
 
 
 if __name__ == "__main__":

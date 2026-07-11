@@ -69,6 +69,7 @@ class ERSDataLoader(BaseModel):
         ).reset_index()
 
         rucc_data.rename(columns={"RUCC_2023": "RUCC", "FIPS": "GEOID"}, inplace=True)
+        rucc_data["GEOID"] = rucc_data["GEOID"].astype(str).str.zfill(5)
 
         # Clean county names
         rucc_data["County_Name"] = (
