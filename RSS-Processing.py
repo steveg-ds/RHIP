@@ -67,7 +67,7 @@ facilities_gdf = gpd.GeoDataFrame(
     crs="EPSG:4326",
 )
 
-county_geo = acs_loader.collect_geometry_data(geometry_type="counties", year=2022)
+county_geo = acs_loader.collect_geometry_data(geometry_type="counties", year=2021)
 county_geo["GEOID"] = county_geo["GEOID"].astype(int)
 
 gdf_facilities = gpd.sjoin(
