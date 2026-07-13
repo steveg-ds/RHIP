@@ -199,7 +199,7 @@ print("Deriving ACS variables...")
 hs_grades = [
     "GRADES_0", "GRADES_1", "GRADES_2", "GRADES_3", "GRADES_4",
     "GRADES_5", "GRADES_6", "GRADES_7", "GRADES_8", "GRADES_9",
-    "GRADES_10", "GRADES_11",
+    "GRADES_10", "GRADES_11", "GRADES_12",
 ]
 cost_cols = [
     "MORT_30_35", "MORT_35_40", "MORT_40_50", "MORT_50_PLUS",
@@ -228,7 +228,7 @@ detention_final["No_HS"] = (
 
 detention_final["HousingQuality"] = (
     (detention_final["LACK_PLUMBING"] + detention_final["LACK_KITCHEN"])
-    / (detention_final["PLUMB_TOTAL"] + detention_final["KITCH_TOTAL"]).replace(0, np.nan)
+    / np.maximum(detention_final["PLUMB_TOTAL"], detention_final["KITCH_TOTAL"]).replace(0, np.nan)
 )
 
 detention_final["Poverty"] = (
@@ -253,7 +253,7 @@ detention_final = detention_final.rename(columns={"RUCC": "rucc_code"})
 
 # ── 9. Output ──────────────────────────────────────────────────────────────
 OUT_PATH = Path(".data/RSS_ANALYSIS_FINAL.csv")
-# detention_final.to_csv(OUT_PATH, index=False)
+detention_final.to_csv(OUT_PATH, index=False)
 
 print(f"\nDone. {len(detention_final)} records written to {OUT_PATH}")
 print(f"  GEOID dtype: {detention_final.GEOID.dtype}")
