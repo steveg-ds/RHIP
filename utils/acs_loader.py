@@ -6,12 +6,6 @@ from typing import Any, ClassVar, Literal
 import geopandas as gpd
 import numpy as np
 import pandas as pd
-try:
-    import lonboard
-    if not hasattr(lonboard.experimental, "ArcLayer") and hasattr(lonboard, "ArcLayer"):
-        lonboard.experimental.ArcLayer = lonboard.ArcLayer
-except ImportError:
-    pass
 
 import pytidycensus as tc
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -238,7 +232,9 @@ class CensusDataLoader(BaseModel):
         )
         if not result.empty and result.crs is not None:
             result = result.to_crs("EPSG:4326")
-        return result
+        result["GEOID"] = result["GEOID"].astype(int)
+        
+        return result[["GEOID", 'geometry']]
 
 
 if __name__ == "__main__":
