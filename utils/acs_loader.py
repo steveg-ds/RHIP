@@ -7,7 +7,10 @@ import geopandas as gpd
 import numpy as np
 import pandas as pd
 
-import pytidycensus as tc
+import warnings
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore", message="Mapping functions unavailable", category=UserWarning)
+    import pytidycensus as tc
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 from pygris import counties, tracts
 
@@ -72,12 +75,13 @@ class CensusDataLoader(BaseModel):
         else:
             fetch_vars = sorted(list(set(variables)))
 
-        fetch_states = states if states is not None else self.states
-
-        if not fetch_states:
-            fetch_states = self.validate_states(None)
-
-        state_param: Any = list(fetch_states) if fetch_states else None
+        if geography == "county" and states is None:
+            state_param = None
+        else:
+            fetch_states = states if states is not None else self.states
+            if not fetch_states:
+                fetch_states = self.validate_states(None)
+            state_param = list(fetch_states) if fetch_states else None
 
         if not std_out:
             with io.StringIO() as buf, contextlib.redirect_stdout(buf):
@@ -125,6 +129,16 @@ class CensusDataLoader(BaseModel):
             fetch_vars = variables
         else:
             fetch_vars = sorted(list(set(variables)))
+
+        geography = kwargs.get("geography", "county")
+        if geography == "county":
+            return self.fetch(
+                variables=fetch_vars,
+                states=None,
+                std_out=std_out,
+                moe=moe,
+                **kwargs,
+            )
 
         all_results = []
 
@@ -232,9 +246,12 @@ class CensusDataLoader(BaseModel):
         )
         if not result.empty and result.crs is not None:
             result = result.to_crs("EPSG:4326")
+
         result["GEOID"] = result["GEOID"].astype(int)
+
+        result.rename(columns={"NAMELSAD": "COUNTY", "STUSPS": "STATE"}, inplace=True)
         
-        return result[["GEOID", 'geometry']]
+        return result[["GEOID", "STATE", "COUNTY", 'geometry']]
 
 
 if __name__ == "__main__":
@@ -261,3 +278,5 @@ if __name__ == "__main__":
         print(result_multiple.head())
     except Exception as e:
         print(f"An error occurred during fetch_multiple: {e}")
+
+

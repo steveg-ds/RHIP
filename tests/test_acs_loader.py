@@ -4,13 +4,9 @@ from utils.acs_loader import CensusDataLoader
 import pandas as pd
 
 def test_config_validation():
-    loader = CensusDataLoader(year=2024, states=["01", "02"], api_key="test_key")
-    assert loader.year == 2024
+    loader = CensusDataLoader(states=["01", "02"], api_key="test_key")
     assert loader.states == ["01", "02"]
     assert loader.api_key == "test_key"
-
-    with pytest.raises(ValidationError):
-        CensusDataLoader(year=1999, states=["01"])
 
 def test_loader_fetch(monkeypatch):
     called_count = 0
@@ -22,7 +18,7 @@ def test_loader_fetch(monkeypatch):
     import pytidycensus as tc
     monkeypatch.setattr(tc, "get_acs", mock_get_acs)
 
-    loader = CensusDataLoader(year=2024, states=["01"], api_key="dummy")
+    loader = CensusDataLoader(states=["01"], api_key="dummy")
     df = loader.fetch(["B17001_001E"])
 
     assert called_count == 1
@@ -36,7 +32,7 @@ def test_fetch_stdout_redirection(monkeypatch, capsys):
     import pytidycensus as tc
     monkeypatch.setattr(tc, "get_acs", mock_get_acs)
 
-    loader = CensusDataLoader(year=2024, states=["01"], api_key="dummy")
+    loader = CensusDataLoader(states=["01"], api_key="dummy")
     
     # 1. Test with std_out=False (default)
     df = loader.fetch(["B17001_001E"], std_out=False)
@@ -56,7 +52,7 @@ def test_fetch_multiple_stdout_redirection(monkeypatch, capsys):
     import pytidycensus as tc
     monkeypatch.setattr(tc, "get_acs", mock_get_acs)
 
-    loader = CensusDataLoader(year=2024, states=["01", "02"], api_key="dummy")
+    loader = CensusDataLoader(states=["01", "02"], api_key="dummy")
     
     # 1. Test with std_out=False (default)
     df = loader.fetch_multiple(["B17001_001E"], max_workers=2, std_out=False)
@@ -78,7 +74,7 @@ def test_fetch_with_dict(monkeypatch):
     import pytidycensus as tc
     monkeypatch.setattr(tc, "get_acs", mock_get_acs)
 
-    loader = CensusDataLoader(year=2024, states=["01"], api_key="dummy")
+    loader = CensusDataLoader(states=["01"], api_key="dummy")
     variables_dict = {"poverty_rate": "B17001_002E"}
     df = loader.fetch(variables_dict)
 

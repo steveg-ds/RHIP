@@ -80,7 +80,42 @@ class ERSDataLoader(BaseModel):
             .str.lower()
         )
 
-        # TODO: this function needs to apply the same continental bool logic as collect_ruca_data
+        if self.continental:
+            df = df[~df["State"].isin(list(self.NON_CONTINENTAL))].copy()
+
+        # CT switched from 8 counties to 9 planning regions in 2022.
+        # The RUCC dataset uses new planning region GEOIDs (9110–9190) while
+        # Census/ACS data for 2013/2018 still uses old county GEOIDs (9001–9015).
+        # Append crosswalk rows so old GEOIDs resolve to a RUCC value.
+        _CT_CROSSWALK = {
+            9001: ("CT", "fairfield",     "2"),  # Fairfield → Greater Bridgeport PR
+            9003: ("CT", "hartford",      "1"),  # Hartford  → Capitol PR
+            9005: ("CT", "litchfield",    "4"),  # Litchfield → Northwest Hills PR
+            9007: ("CT", "middlesex",     "1"),  # Middlesex → Lower CT River Valley PR
+            9009: ("CT", "new haven",     "2"),  # New Haven → South Central CT PR
+            9011: ("CT", "new london",    "2"),  # New London → Southeastern CT PR
+            9013: ("CT", "tolland",       "4"),  # Tolland   → Northeastern CT PR
+            9015: ("CT", "windham",       "4"),  # Windham   → Northeastern CT PR
+        }
+        ct_rows = pd.DataFrame(
+            [
+                {
+                    "GEOID": geoid,
+                    "State": state,
+                    "County_Name": name,
+                    "RUCC": rucc,
+                    "Description": None,
+                    "Population_2020": None,
+                }
+                for geoid, (state, name, rucc) in _CT_CROSSWALK.items()
+            ]
+        )
+        df = pd.concat([df, ct_rows], ignore_index=True)
+
+        # Drop dissolved/non-existent FIPS (e.g. Bedford City VA 51515,
+        # absorbed into Bedford County 51019 in 2013)
+        _DISSOLVED_FIPS = {51515}
+        df = df[~df["GEOID"].isin(_DISSOLVED_FIPS)].copy()
 
         return df
 
