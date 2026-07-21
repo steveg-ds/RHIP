@@ -19,3 +19,9 @@ dev.py
 RSS-Analysis_files/
 docs/
 docs/superpowers/
+
+# Quarto generated build artifacts and preview outputs
+.quarto/
+*_files/
+_site/
+*.html
