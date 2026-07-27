@@ -4,7 +4,7 @@ Dep. Variable:                is_host   No. Observations:                 9321
 Model:                          Logit   Df Residuals:                     9302
 Method:                           MLE   Df Model:                           18
 Date:                Sun, 26 Jul 2026   Pseudo R-squ.:                  0.1732
-Time:                        19:52:06   Log-Likelihood:                -2621.1
+Time:                        20:02:52   Log-Likelihood:                -2621.1
 converged:                       True   LL-Null:                       -3170.2
 Covariance Type:              cluster   LLR p-value:                6.630e-222
 ====================================================================================
