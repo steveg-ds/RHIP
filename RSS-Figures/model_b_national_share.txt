@@ -4,7 +4,7 @@ Dep. Variable:     log_national_share   R-squared:                       0.151
 Model:                            OLS   Adj. R-squared:                  0.135
 Method:                 Least Squares   F-statistic:                     7.900
 Date:                Sun, 26 Jul 2026   Prob (F-statistic):           2.64e-18
-Time:                        19:45:41   Log-Likelihood:                -2614.1
+Time:                        19:52:06   Log-Likelihood:                -2614.1
 No. Observations:                 997   AIC:                             5266.
 Df Residuals:                     978   BIC:                             5359.
 Df Model:                          18                                         
