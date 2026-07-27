@@ -1,0 +1,61 @@
+REGRESSION RESULTS
+------------------
+
+SUMMARY OF OUTPUT: ML SPATIAL LAG PANEL - FIXED EFFECTS
+------------------------------------------------------------------------------------
+Data set            :     unknown
+Weights matrix      :Queen Contiguity
+Dependent Variable  :arcsinh_detention_rate                Number of Observations:        9306
+Mean dependent var  :      0.0000                Number of Variables   :          17
+S.D. dependent var  :      0.5152                Degrees of Freedom    :        9289
+Pseudo R-squared    :      0.0108
+Log likelihood      :  -6985.7384
+Sigma-square ML     :      0.2626                Akaike info criterion :   14005.477
+S.E of regression   :      0.5124                Schwarz criterion     :   14126.830
+Fixed-effects mean  :     -0.1320
+
+------------------------------------------------------------------------------------
+            Variable     Coefficient       Std.Error     z-Statistic     Probability
+------------------------------------------------------------------------------------
+              GINI_z         0.21282         0.29865         0.71262         0.47608
+     RiskyMobility_z        -0.01308         0.13405        -0.09757         0.92227
+          SnapRate_z         0.77737         0.32625         2.38275         0.01718
+      Unemployment_z        -0.05674         0.38945        -0.14569         0.88417
+             No_HS_z        -1.32381         0.36522        -3.62473         0.00029
+    HousingQuality_z         1.54895         0.38956         3.97617         0.00007
+           Poverty_z         0.47328         0.30167         1.56886         0.11668
+        CostBurden_z        -0.41833         0.27570        -1.51732         0.12919
+            W_GINI_z        -0.31910         0.67875        -0.47012         0.63827
+   W_RiskyMobility_z        -0.24706         0.31055        -0.79556         0.42629
+        W_SnapRate_z        -0.40504         0.56045        -0.72271         0.46986
+    W_Unemployment_z        -0.00856         0.65637        -0.01304         0.98959
+           W_No_HS_z         1.74626         0.56324         3.10039         0.00193
+  W_HousingQuality_z         0.00527         0.74029         0.00711         0.99432
+         W_Poverty_z        -0.13541         0.63608        -0.21288         0.83142
+      W_CostBurden_z         1.28576         0.50362         2.55305         0.01068
+W_arcsinh_detention_rate         0.06318         0.01688         3.74375         0.00018
+------------------------------------------------------------------------------------
+Warning: Assuming panel is in long format.
+y[0:N] refers to T0, y[N+1:2N] refers to T1, etc.
+x[0:N] refers to T0, x[N+1:2N] refers to T1, etc.
+
+SPATIAL LAG MODEL IMPACTS
+Impacts computed using the 'simple' method.
+            Variable         Direct        Indirect          Total
+              GINI_z         0.2128          0.0144          0.2272
+     RiskyMobility_z        -0.0131         -0.0009         -0.0140
+          SnapRate_z         0.7774          0.0524          0.8298
+      Unemployment_z        -0.0567         -0.0038         -0.0606
+             No_HS_z        -1.3238         -0.0893         -1.4131
+    HousingQuality_z         1.5489          0.1045          1.6534
+           Poverty_z         0.4733          0.0319          0.5052
+        CostBurden_z        -0.4183         -0.0282         -0.4465
+            W_GINI_z        -0.3191         -0.0215         -0.3406
+   W_RiskyMobility_z        -0.2471         -0.0167         -0.2637
+        W_SnapRate_z        -0.4050         -0.0273         -0.4324
+    W_Unemployment_z        -0.0086         -0.0006         -0.0091
+           W_No_HS_z         1.7463          0.1178          1.8640
+  W_HousingQuality_z         0.0053          0.0004          0.0056
+         W_Poverty_z        -0.1354         -0.0091         -0.1445
+      W_CostBurden_z         1.2858          0.0867          1.3725
+================================ END OF REPORT =====================================
