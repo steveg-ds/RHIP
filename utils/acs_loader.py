@@ -168,6 +168,8 @@ class CensusDataLoader(BaseModel):
                     except Exception as exc:
                         if std_out:
                             print(f"State query generated an exception: {exc}")
+                        else:
+                            raise exc
 
         if not std_out:
             with io.StringIO() as buf, contextlib.redirect_stdout(buf):
@@ -247,6 +249,7 @@ class CensusDataLoader(BaseModel):
         if not result.empty and result.crs is not None:
             result = result.to_crs("EPSG:4326")
 
+        result = result.dropna(subset=["GEOID"]).copy()
         result["GEOID"] = result["GEOID"].astype(int)
 
         result.rename(columns={"NAMELSAD": "COUNTY", "STUSPS": "STATE"}, inplace=True)
