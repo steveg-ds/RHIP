@@ -50,7 +50,7 @@ class ERSDataLoader(BaseModel):
         if self.continental:
             # Filter out non-continental US states
             df = df[
-                ~df["state_name"].isin(list(self.NON_CONTINENTAL))
+                ~df["state_name"].str.title().isin(list(self.NON_CONTINENTAL))
             ].copy()
 
         return df
@@ -111,6 +111,7 @@ class ERSDataLoader(BaseModel):
             ]
         )
         df = pd.concat([df, ct_rows], ignore_index=True)
+        df["RUCC"] = df["RUCC"].astype(float)
 
         # Drop dissolved/non-existent FIPS (e.g. Bedford City VA 51515,
         # absorbed into Bedford County 51019 in 2013)
